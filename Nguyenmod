@@ -3,97 +3,72 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dong AI</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#212121;color:#eee;font-family:Arial,sans-serif}
-header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #383838}
-.logo{font-size:22px;font-weight:bold;color:#8ab4f8}
-.tag{font-size:12px;color:#aaa}
-main{max-width:760px;margin:auto;padding:25px 16px 110px}
-h1{text-align:center;margin-top:60px;font-size:32px}
-.sub{text-align:center;color:#aaa;margin-bottom:35px}
-#chat{display:flex;flex-direction:column;gap:16px}
-.msg{padding:14px 16px;border-radius:16px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.user{background:#343541;align-self:flex-end;max-width:90%}
-.bot{background:#292929;align-self:stretch}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#212121;padding:12px 14px 20px}
-.inputbox{max-width:730px;margin:auto;display:flex;align-items:flex-end;gap:8px;background:#303030;border:1px solid #555;border-radius:24px;padding:9px}
-textarea{flex:1;resize:none;border:0;outline:0;background:transparent;color:white;font-size:16px;padding:9px;max-height:120px;min-width:0}
-button{border:0;cursor:pointer}
-#send{background:#8ab4f8;color:#111;border-radius:50%;width:42px;height:42px;font-size:21px;flex-shrink:0}
-.hint{text-align:center;color:#888;font-size:11px;margin-top:8px}
-.actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:25px}
-.actions button{padding:11px 15px;border-radius:20px;background:#303030;color:#eee;border:1px solid #484848}
+body{margin:0;background:#10131c;color:white;font-family:Arial}
+header{padding:18px;background:#191e2b;border-bottom:1px solid #343a4b;font-size:23px;font-weight:bold;color:#75a7ff}
+main{max-width:700px;margin:auto;padding:20px 15px 120px}
+h1{text-align:center;margin-top:65px}
+.sub{text-align:center;color:#aaa}
+#chat{display:flex;flex-direction:column;gap:15px;margin-top:30px}
+.msg{padding:13px 16px;border-radius:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.user{background:#3156a4;align-self:flex-end;max-width:90%}
+.bot{background:#252a38;align-self:stretch}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#10131c;padding:12px}
+.form{max-width:670px;margin:auto;display:flex;gap:8px;background:#252a38;border:1px solid #454c60;border-radius:22px;padding:8px}
+textarea{flex:1;min-width:0;resize:none;background:transparent;color:white;border:0;outline:0;padding:10px;font-size:16px}
+button{border:0;border-radius:15px;background:#75a7ff;color:#10131c;font-weight:bold;padding:12px;cursor:pointer}
+.note{text-align:center;font-size:11px;color:#888;margin-top:8px}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">✦ Dong AI</div>
-  <div class="tag">AI ASSISTANT</div>
-</header>
-
+<header>✦ Dong AI</header>
 <main>
-  <h1 id="welcome">Xin chào! 👋</h1>
-  <p class="sub" id="subtitle">Hôm nay tôi có thể giúp gì cho bạn?</p>
-
-  <div id="chat"></div>
-
-  <div class="actions" id="suggestions">
-    <button onclick="suggest('Viết cho tôi một trang web HTML')">💻 Viết code</button>
-    <button onclick="suggest('Giải thích trí tuệ nhân tạo là gì')">🧠 Hỏi AI</button>
-    <button onclick="suggest('Gợi ý ý tưởng làm website')">💡 Ý tưởng</button>
-  </div>
+<h1 id="welcome">Xin chào! 👋</h1>
+<p class="sub" id="sub">Bạn muốn hỏi gì hôm nay?</p>
+<div id="chat"></div>
 </main>
-
 <div class="bottom">
-  <div class="inputbox">
-    <textarea id="input" rows="1" placeholder="Nhắn tin cho Dong AI..."></textarea>
-    <button id="send" onclick="sendMessage()">↑</button>
-  </div>
-  <div class="hint">Dong AI · Trợ lý của bạn</div>
+<div class="form">
+<textarea id="input" rows="1" placeholder="Nhập câu hỏi của bạn..."></textarea>
+<button onclick="send()">Gửi ➤</button>
 </div>
-
+<div class="note">Dong AI · Phiên bản thử nghiệm</div>
+</div>
 <script>
-const input = document.getElementById('input');
-const chat = document.getElementById('chat');
+const input=document.getElementById("input");
+const chat=document.getElementById("chat");
 
-function addMessage(text, type) {
-  const div = document.createElement('div');
-  div.className = 'msg ' + type;
-  div.textContent = text;
-  chat.appendChild(div);
-  window.scrollTo(0, document.body.scrollHeight);
+function add(text,type){
+ const el=document.createElement("div");
+ el.className="msg "+type;
+ el.textContent=text;
+ chat.appendChild(el);
+ window.scrollTo(0,document.body.scrollHeight);
 }
 
-function suggest(text) {
-  input.value = text;
-  sendMessage();
+function send(){
+ const text=input.value.trim();
+ if(!text)return;
+
+ document.getElementById("welcome").style.display="none";
+ document.getElementById("sub").style.display="none";
+ add(text,"user");
+ input.value="";
+
+ let answer="Xin chào! Mình là Dong AI. Bạn vừa hỏi: "+text+
+ "\n\nĐây là bản giao diện thử nghiệm. Để trả lời kiến thức thực sự, mình cần kết nối mô hình AI qua API.";
+
+ setTimeout(()=>add(answer,"bot"),300);
 }
 
-function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  document.getElementById('welcome').style.display = 'none';
-  document.getElementById('subtitle').style.display = 'none';
-  document.getElementById('suggestions').style.display = 'none';
-
-  addMessage(text, 'user');
-  input.value = '';
-
-  // Bản demo: chưa kết nối mô hình AI thật.
-  const reply = 'Bạn vừa hỏi: "' + text + '"\n\nDong AI đã nhận được tin nhắn! Đây hiện là giao diện demo. Để trả lời thông minh như ChatGPT, bạn cần kết nối API AI qua máy chủ backend.';
-
-  setTimeout(() => addMessage(reply, 'bot'), 400);
-}
-
-input.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+input.addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&!e.shiftKey){
+  e.preventDefault();
+  send();
+ }
 });
 </script>
 </body>
