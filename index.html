@@ -3,73 +3,315 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10131c">
 <title>Dong AI</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#10131c;color:white;font-family:Arial}
-header{padding:18px;background:#191e2b;border-bottom:1px solid #343a4b;font-size:23px;font-weight:bold;color:#75a7ff}
-main{max-width:700px;margin:auto;padding:20px 15px 120px}
-h1{text-align:center;margin-top:65px}
-.sub{text-align:center;color:#aaa}
-#chat{display:flex;flex-direction:column;gap:15px;margin-top:30px}
-.msg{padding:13px 16px;border-radius:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.user{background:#3156a4;align-self:flex-end;max-width:90%}
-.bot{background:#252a38;align-self:stretch}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#10131c;padding:12px}
-.form{max-width:670px;margin:auto;display:flex;gap:8px;background:#252a38;border:1px solid #454c60;border-radius:22px;padding:8px}
-textarea{flex:1;min-width:0;resize:none;background:transparent;color:white;border:0;outline:0;padding:10px;font-size:16px}
-button{border:0;border-radius:15px;background:#75a7ff;color:#10131c;font-weight:bold;padding:12px;cursor:pointer}
-.note{text-align:center;font-size:11px;color:#888;margin-top:8px}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #10131c;
+  color: #f5f5f5;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  height: 64px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #191e2b;
+  border-bottom: 1px solid #303748;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: bold;
+  color: #83aaff;
+}
+
+.status {
+  font-size: 12px;
+  color: #aeb8c9;
+}
+
+main {
+  max-width: 760px;
+  margin: auto;
+  padding: 24px 16px 150px;
+}
+
+.welcome {
+  text-align: center;
+  margin-top: 70px;
+}
+
+.welcome h1 {
+  font-size: 32px;
+}
+
+.welcome p {
+  color: #aeb8c9;
+}
+
+.suggestions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.suggestions button {
+  background: #202636;
+  border: 1px solid #394256;
+  color: white;
+  border-radius: 18px;
+  padding: 11px 14px;
+}
+
+#chat {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.message {
+  padding: 14px 16px;
+  border-radius: 16px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.user {
+  align-self: flex-end;
+  max-width: 90%;
+  background: #3157a5;
+}
+
+.bot {
+  align-self: stretch;
+  background: #202636;
+  border: 1px solid #30394c;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 14px 18px;
+  background: linear-gradient(transparent, #10131c 18%);
+}
+
+.input-box {
+  max-width: 730px;
+  margin: auto;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 9px;
+  border: 1px solid #46506a;
+  border-radius: 22px;
+  background: #202636;
+}
+
+textarea {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  max-height: 120px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  padding: 11px 8px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+textarea::placeholder {
+  color: #a0a9ba;
+}
+
+#send {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: #83aaff;
+  color: #10131c;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:active {
+  opacity: 0.75;
+}
+
+.hint {
+  text-align: center;
+  color: #8e98aa;
+  font-size: 11px;
+  margin-top: 9px;
+}
+
+.hidden {
+  display: none !important;
+}
 </style>
 </head>
+
 <body>
-<header>✦ Dong AI</header>
+<header>
+  <div class="logo">✦ Dong AI</div>
+  <div class="status">Trợ lý AI demo</div>
+</header>
+
 <main>
-<h1 id="welcome">Xin chào! 👋</h1>
-<p class="sub" id="sub">Bạn muốn hỏi gì hôm nay?</p>
-<div id="chat"></div>
+  <section class="welcome" id="welcome">
+    <h1>Xin chào! 👋</h1>
+    <p>Tôi có thể giúp gì cho bạn hôm nay?</p>
+
+    <div class="suggestions">
+      <button onclick="suggest('Hãy viết code HTML cho tôi')">
+        💻 Viết code
+      </button>
+      <button onclick="suggest('Trí tuệ nhân tạo là gì?')">
+        🧠 Hỏi AI
+      </button>
+      <button onclick="suggest('Gợi ý ý tưởng làm website')">
+        💡 Ý tưởng
+      </button>
+    </div>
+  </section>
+
+  <section id="chat" aria-live="polite"></section>
 </main>
+
 <div class="bottom">
-<div class="form">
-<textarea id="input" rows="1" placeholder="Nhập câu hỏi của bạn..."></textarea>
-<button onclick="send()">Gửi ➤</button>
+  <div class="input-box">
+    <textarea
+      id="input"
+      rows="1"
+      placeholder="Nhập tin nhắn..."
+      aria-label="Tin nhắn"
+    ></textarea>
+
+    <button id="send" type="button" aria-label="Gửi tin nhắn">
+      ↑
+    </button>
+  </div>
+
+  <div class="hint">
+    Dong AI có thể đưa ra câu trả lời chưa chính xác.
+  </div>
 </div>
-<div class="note">Dong AI · Phiên bản thử nghiệm</div>
-</div>
+
 <script>
-const input=document.getElementById("input");
-const chat=document.getElementById("chat");
+(function () {
+  const input = document.getElementById("input");
+  const chat = document.getElementById("chat");
+  const sendButton = document.getElementById("send");
+  const welcome = document.getElementById("welcome");
 
-function add(text,type){
- const el=document.createElement("div");
- el.className="msg "+type;
- el.textContent=text;
- chat.appendChild(el);
- window.scrollTo(0,document.body.scrollHeight);
-}
+  function addMessage(text, type) {
+    const message = document.createElement("div");
+    message.className = "message " + type;
+    message.textContent = text;
+    chat.appendChild(message);
 
-function send(){
- const text=input.value.trim();
- if(!text)return;
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
+  }
 
- document.getElementById("welcome").style.display="none";
- document.getElementById("sub").style.display="none";
- add(text,"user");
- input.value="";
+  function getReply(text) {
+    const question = text.toLowerCase();
 
- let answer="Xin chào! Mình là Dong AI. Bạn vừa hỏi: "+text+
- "\n\nĐây là bản giao diện thử nghiệm. Để trả lời kiến thức thực sự, mình cần kết nối mô hình AI qua API.";
+    if (question.includes("xin chào") ||
+        question.includes("hello") ||
+        question.includes("chào")) {
+      return "Xin chào! 👋 Chào mừng bạn đến với Dong AI. Bạn cần mình giúp gì?";
+    }
 
- setTimeout(()=>add(answer,"bot"),300);
-}
+    if (question.includes("bạn là ai")) {
+      return "Mình là Dong AI, một chatbot demo do bạn xây dựng bằng HTML, CSS và JavaScript.";
+    }
 
-input.addEventListener("keydown",e=>{
- if(e.key==="Enter"&&!e.shiftKey){
-  e.preventDefault();
-  send();
- }
-});
+    if (question.includes("html") ||
+        question.includes("viết code") ||
+        question.includes("lập trình")) {
+      return "Để tạo website, bạn có thể dùng HTML để viết nội dung, CSS để trang trí và JavaScript để tạo chức năng tương tác. Đây là Dong AI phiên bản demo nên chưa thể tự viết code thông minh như một mô hình AI thật.";
+    }
+
+    if (question.includes("one piece") ||
+        question.includes("luffy")) {
+      return "One Piece là bộ truyện phiêu lưu nổi tiếng. Luffy mơ ước trở thành Vua Hải Tặc! 🏴‍☠️";
+    }
+
+    if (question.includes("cảm ơn")) {
+      return "Không có gì! 😊 Mình rất vui được giúp bạn.";
+    }
+
+    return "Mình đã nhận được câu hỏi: " + text +
+      "\n\nĐây là phản hồi demo. Để Dong AI trả lời được nhiều câu hỏi với kiến thức rộng như ChatGPT, bạn cần kết nối một mô hình AI thật thông qua API và backend.";
+  }
+
+  function sendMessage() {
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    welcome.classList.add("hidden");
+    addMessage(text, "user");
+
+    input.value = "";
+    input.style.height = "auto";
+    sendButton.disabled = true;
+    sendButton.textContent = "...";
+
+    window.setTimeout(function () {
+      addMessage(getReply(text), "bot");
+      sendButton.disabled = false;
+      sendButton.textContent = "↑";
+      input.focus();
+    }, 350);
+  }
+
+  window.suggest = function (text) {
+    input.value = text;
+    sendMessage();
+  };
+
+  sendButton.addEventListener("click", sendMessage);
+
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  input.addEventListener("input", function () {
+    input.style.height = "auto";
+    input.style.height =
+      Math.min(input.scrollHeight, 120) + "px";
+  });
+})();
 </script>
 </body>
 </html>
